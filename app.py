@@ -10,7 +10,6 @@ with st.sidebar:
 
 # Barra lateral
 with st.sidebar:
-    st.header("⚙️ Configuración")
     # Intentamos jalar la llave de Secrets, si no, la pedimos
     if "GROQ_API_KEY" in st.secrets:
         api_key = st.secrets["GROQ_API_KEY"]
@@ -67,6 +66,7 @@ if st.button("🚀 GENERAR PROYECTO GRATUITO"):
         except Exception as e:
 
             st.error(f"Error: {e}")
+
 
 
 
