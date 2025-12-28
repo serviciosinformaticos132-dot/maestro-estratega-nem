@@ -56,7 +56,7 @@ if st.button("🚀 GENERAR PROYECTO GRATUITO"):
                         {"role": "system", "content": SISTEMA_PROMPT},
                         {"role": "user", "content": f"Proyecto para {nivel_edu} {grado_edu}. Tema: {tema_problema}."}
                     ],
-                    model="llama-3.1-70b-versatile", # El mejor modelo gratuito de Groq
+                    model= "llama-3.3-70b-versatile", # El mejor modelo gratuito de Groq
                 )
                 
                 respuesta = chat_completion.choices[0].message.content
@@ -65,4 +65,5 @@ if st.button("🚀 GENERAR PROYECTO GRATUITO"):
                 
                 st.download_button("📩 Descargar Planeación", respuesta, file_name="Planeacion_NEM.txt")
         except Exception as e:
+
             st.error(f"Error: {e}")
