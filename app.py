@@ -7,8 +7,6 @@ st.set_page_config(page_title="Maestro Estratega NEM (Gratis)", page_icon="🇲�
 # Logo y Título
 with st.sidebar:
     st.image("logo.png", width=200) # El logo aparecerá aquí
-    st.header("⚙️ Configuración")
-    # ... resto del código
 
 # Barra lateral
 with st.sidebar:
@@ -69,6 +67,7 @@ if st.button("🚀 GENERAR PROYECTO GRATUITO"):
         except Exception as e:
 
             st.error(f"Error: {e}")
+
 
 
 
