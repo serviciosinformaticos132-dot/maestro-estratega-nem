@@ -5,12 +5,6 @@ from groq import Groq
 st.set_page_config(page_title="Maestro Estratega NEM (Gratis)", page_icon="🇲🇽", layout="wide")
 
 # Logo y Título
-try:
-    st.image("logo.png", width=150)
-except:
-    st.write("Logo no encontrado")
-st.title("🤖 Asistente Docente Integral")
-
 with st.sidebar:
     st.image("logo.png", width=200) # El logo aparecerá aquí
     st.header("⚙️ Configuración")
@@ -75,6 +69,7 @@ if st.button("🚀 GENERAR PROYECTO GRATUITO"):
         except Exception as e:
 
             st.error(f"Error: {e}")
+
 
 
 
