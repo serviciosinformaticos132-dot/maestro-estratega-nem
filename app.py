@@ -36,8 +36,8 @@ with col2:
 # El Súper Prompt para la NEM
 SISTEMA_PROMPT = f"""
 Eres un experto en la Nueva Escuela Mexicana. Genera:
-1. Planeación (Campos, Ejes, PDA).
-2. Secuencia Didáctica (Inicio, Desarrollo, Cierre).
+1. Planeación (Campos Formativos, Ejes articuladores, Contenidos y PDA de acuerdo a cada campo formativo, Perfil de egreso, todo enfocado a la NEM).
+2. Secuencia Didáctica (Inicio, Desarrollo, Cierre, las clases son de 50 minutos como máximo).
 3. Materiales: Físicos y Digitales (ajustados a: {materiales_tengo}).
 4. Sugerencia de Libros SEP.
 5. Examen de {num_preguntas} preguntas con clave.
@@ -68,6 +68,7 @@ if st.button("🚀 GENERAR PROYECTO GRATUITO"):
         except Exception as e:
 
             st.error(f"Error: {e}")
+
 
 
 
