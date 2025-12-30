@@ -14,7 +14,7 @@ with st.sidebar:
     # Intentamos jalar la llave de Secrets, si no, la pedimos
     if "GROQ_API_KEY" in st.secrets:
         api_key = st.secrets["GROQ_API_KEY"]
-        st.success("Conectado al motor gratuito.")
+        st.success("Conectado al motor.")
     else:
         api_key = st.text_input("Ingresa tu Groq API Key (gsk_...)", type="password")
     
@@ -87,7 +87,7 @@ if st.button("🚀 GENERAR PROYECTO GRATUITO"):
     else:
         try:
             client = Groq(api_key=api_key)
-            with st.spinner("La IA está trabajando gratis para ti..."):
+            with st.spinner("La IA está trabajando para ti..."):
                 chat_completion = client.chat.completions.create(
                     messages=[
                         {"role": "system", "content": SISTEMA_PROMPT},
@@ -102,4 +102,5 @@ if st.button("🚀 GENERAR PROYECTO GRATUITO"):
                 
                 st.download_button("📩 Descargar Planeación", respuesta, file_name="Planeacion_NEM.txt")
         except Exception as e:
+
             st.error(f"Error: {e}")
