@@ -11,13 +11,18 @@ import base64
 # --- 1. CONFIGURACIÓN DE PÁGINA ---
 st.set_page_config(page_title="Maestro Estratega NEM", page_icon="🍎", layout="wide")
 
-# --- 2. CONEXIÓN A BASE DE DATOS ---
-try:
-    url = st.secrets["SUPABASE_URL"]
-    key = st.secrets["SUPABASE_KEY"]
-    supabase: Client = create_client(url, key)
-except Exception as e:
-    st.error("Error crítico de conexión a Base de Datos.")
+# --- 2. CONEXIÓN SILENCIOSA A BASE DE DATOS ---
+def conectar_db():
+    try:
+        # Aquí el código intenta leer las llaves
+        url = st.secrets["SUPABASE_URL"]
+        key = st.secrets["SUPABASE_KEY"]
+        return create_client(url, key)
+    except:
+        # Si NO encuentra las llaves, devuelve "None" en lugar de un error rojo
+        return None
+
+supabase = conectar_db()
 
 # --- INICIALIZACIÓN DE HISTORIAL DE SESIÓN ---
 if 'historial_planeaciones' not in st.session_state:
@@ -250,5 +255,6 @@ else:
             st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("<div class='footer'>© 2025 Maestro Estratega NEM | Matamoros, Tamaulipas.</div>", unsafe_allow_html=True)
+
 
 
