@@ -19,16 +19,16 @@ try:
 except Exception as e:
     st.error("Error de configuración de Base de Datos.")
 
-# --- 3. FUNCIONES DE EXPORTACIÓN (MEJORADAS PARA TABLAS Y TÍTULOS) ---
+# --- INICIALIZACIÓN DE HISTORIAL (NUEVO) ---
+if 'historial_planeaciones' not in st.session_state:
+    st.session_state.historial_planeaciones = []
+
+# --- 3. FUNCIONES DE EXPORTACIÓN ---
 def crear_word(contenido, nombre_proyecto):
     doc = Document()
-    # Título con el Nombre del Proyecto
     titulo = doc.add_heading(nombre_proyecto, 0)
     titulo.alignment = WD_ALIGN_PARAGRAPH.CENTER
-    
-    # El contenido se agrega respetando que la IA ya lo envía en formato tabla markdown
     doc.add_paragraph(contenido)
-    
     bio = io.BytesIO()
     doc.save(bio)
     return bio.getvalue()
@@ -36,10 +36,10 @@ def crear_word(contenido, nombre_proyecto):
 def generar_pdf_html(contenido, nombre_proyecto):
     html = f"""
     <html>
-    <head><style>table {{ border-collapse: collapse; width: 100%; }} th, td {{ border: 1px solid black; padding: 8px; text-align: left; }}</style></head>
-    <body style='font-family: Arial;'>
-    <h1 style='text-align: center;'>{nombre_proyecto}</h1>
-    <div>{contenido.replace('|', '').replace('-', '')}</div>
+    <head><style>table {{ border-collapse: collapse; width: 100%; font-family: sans-serif; }} th, td {{ border: 1px solid black; padding: 8px; text-align: left; }} th {{ background-color: #f2f2f2; }}</style></head>
+    <body style='padding: 20px;'>
+    <h1 style='text-align: center; color: #1e3a8a;'>{nombre_proyecto}</h1>
+    <div>{contenido}</div>
     </body></html>
     """
     b64 = base64.b64encode(html.encode()).decode()
@@ -119,6 +119,18 @@ else:
 
     else:
         st.title("🤖 Estación de Planeación Inteligente")
+        
+        # --- SECCIÓN DE HISTORIAL (NUEVO) ---
+        if st.session_state.historial_planeaciones:
+            with st.expander("📂 Ver planeaciones generadas anteriormente en esta sesión"):
+                for idx, plan in enumerate(reversed(st.session_state.historial_planeaciones)):
+                    st.write(f"**{idx+1}. {plan['nombre']}** - {plan['fecha']}")
+                    if st.button(f"Recuperar: {plan['nombre']}", key=f"btn_hist_{idx}"):
+                        st.session_state.resultado = plan['contenido']
+                        st.session_state.nombre_p = plan['nombre']
+                        st.rerun()
+                st.divider()
+
         with st.form("planeacion_nem"):
             col1, col2, col3 = st.columns(3)
             with col1:
@@ -139,28 +151,42 @@ else:
                     with st.spinner("Vinculando con Programa Sintético y Libros SEP 2024..."):
                         client = Groq(api_key=st.secrets["GROQ_API_KEY"])
                         prompt = f"""
-                        Eres experto NEM 2024. Genera una planeación para {grado} de {fase}, Sección {seccion}.
+                        Eres experto NEM 2024 de la SEP. Genera planeación para {grado} de {fase}, Sección {seccion}.
                         Campo: {campo}, Escenario: {escenario}. DURACIÓN EXACTA: {duracion}.
                         Tema: {tema}.
                         
                         REQUISITOS DE FORMATO:
                         1. TODO EL RESULTADO DEBE ESTAR EN TABLAS DE MARKDOWN.
-                        2. TABLA 1: Datos generales, Contenido oficial y PDA (extraído del Programa Sintético vigente).
+                        2. TABLA 1: Datos generales, Contenido oficial y PDA (Programa Sintético vigente).
                         3. TABLA 2: Vinculación con Libros de Texto Gratuitos (LTG) 2024: Nombre del Proyecto y PÁGINAS EXACTAS.
                         4. TABLA 3: Secuencia Didáctica por sesión (45-50 min):
-                           - INICIO (10 min): Actividad y Materiales.
-                           - DESARROLLO (30 min): Actividad central y Materiales.
+                           - INICIO (10 min): Actividad y Materiales específicos.
+                           - DESARROLLO (30 min): Actividad central y Materiales específicos.
                            - CIERRE (10 min): Metacognición y Evaluación.
                         
                         Asegúrate de que el número de sesiones coincida con la temporalidad de {duracion}.
                         """
                         res = client.chat.completions.create(model="llama-3.3-70b-versatile", messages=[{"role": "user", "content": prompt}])
-                        st.session_state.resultado = res.choices[0].message.content
-                        st.session_state.nombre_p = f"Proyecto: {tema[:30]}"
-                        st.markdown(st.session_state.resultado)
+                        
+                        # Guardar resultado y añadir al historial
+                        nuevo_nombre = f"Proyecto: {tema[:30]}"
+                        nuevo_contenido = res.choices[0].message.content
+                        
+                        st.session_state.resultado = nuevo_contenido
+                        st.session_state.nombre_p = nuevo_nombre
+                        
+                        st.session_state.historial_planeaciones.append({
+                            "nombre": nuevo_nombre,
+                            "contenido": nuevo_contenido,
+                            "fecha": datetime.now().strftime("%H:%M:%S")
+                        })
+                        st.rerun()
 
         if 'resultado' in st.session_state:
             st.divider()
+            st.subheader(f"📍 {st.session_state.nombre_p}")
+            st.markdown(st.session_state.resultado)
+            
             c_d1, c_d2 = st.columns(2)
             word_data = crear_word(st.session_state.resultado, st.session_state.nombre_p)
             c_d1.download_button("📄 Descargar en Word", word_data, f"{st.session_state.nombre_p}.docx", use_container_width=True)
