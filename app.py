@@ -163,7 +163,7 @@ else:
         with cp2:
             st.markdown("<div class='price-card-selected'><h3>PLAN 3 AÑOS</h3><h1>$1,999</h1></div>", unsafe_allow_html=True)
             with st.expander("💳 OPCIONES DE PAGO"):
-                st.link_button("PayPal", "https://paypal.me/@SEBASTIANOVALLELOPEZ", use_container_width=True)
+                st.link_button("PayPal", "https://paypal.me/SEBASTIANOVALLELOPEZ", use_container_width=True)
         st.info("💡 Envía tu ticket por 'Contacto' para activar tu acceso.")
 
     elif plan_user == "Cortesía":
@@ -183,5 +183,6 @@ else:
                 client = Groq(api_key=st.secrets["GROQ_API_KEY"])
                 res = client.chat.completions.create(model="llama-3.3-70b-versatile", messages=[{"role":"user","content":f"Planeación detallada NEM: {tema}"}])
                 st.markdown(res.choices[0].message.content)
+
 
 st.markdown("<div class='footer'><p>© 2025 Maestro Estratega NEM | Soporte: contacto@tuapp.com</p></div>", unsafe_allow_html=True)
