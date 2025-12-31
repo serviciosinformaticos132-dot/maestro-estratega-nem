@@ -207,7 +207,7 @@ else:
             with col1:
                 fase = st.selectbox("Fase / Nivel", ["Fase 3", "Fase 4", "Fase 5", "Fase 6"])
                 grado = st.selectbox("Grado Escolar", ["1°", "2°", "3°", "4°", "5°", "6°"])
-                seccion = st.text_input("Sección", value="A", value="B")
+                seccion = st.text_input("Sección", value="A")
             with col2:
                 campo = st.selectbox("Campo Formativo", ["Lenguajes", "Saberes y P. Científico", "Ética, Nat. y Soc.", "De lo Humano y lo Com."])
                 escenario = st.selectbox("Escenario", ["Aula", "Escolar", "Comunitario"])
@@ -257,6 +257,7 @@ else:
             st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("<div class='footer'>© 2025 Maestro Estratega NEM | Matamoros, Tamaulipas.</div>", unsafe_allow_html=True)
+
 
 
 
