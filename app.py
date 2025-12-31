@@ -231,9 +231,10 @@ else:
             c1, c2 = st.columns(2)
             with c1:
                 grado = st.selectbox("Grado Escolar", ["1° Primaria", "2° Primaria", "3° Primaria", "4° Primaria", "5° Primaria", "6° Primaria", "Secundaria"])
+                seccion = st.selectbox("Sección", ["A", "B", "C", "D", "E"]) 
                 campo = st.selectbox("Campo Formativo", ["Lenguajes", "Saberes", "Ética", "Humanitario"])
             with c2:
-                metodologia = st.selectbox("Metodología", ["Proyectos", "STEAM", "ABP", "AS"])
+                metodologia = st.selectbox("Metodología", ["Proyectos Comunitarios", "STEAM", "ABP", "AS"])
                 ejes = st.multiselect("Ejes Articuladores", ["Inclusión", "Pensamiento Crítico", "Vida Saludable"])
             
             pda = st.text_area("PDA / Contenido:", height=100)
@@ -245,3 +246,4 @@ else:
                         st.markdown(res.choices[0].message.content)
 
 st.markdown("<div class='footer'><p>© 2025 Maestro Estratega NEM | Soporte: contacto@tuapp.com</p></div>", unsafe_allow_html=True)
+
