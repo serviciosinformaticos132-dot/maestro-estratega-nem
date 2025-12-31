@@ -213,7 +213,9 @@ else:
                 escenario = st.selectbox("Escenario", ["Aula", "Escolar", "Comunitario"])
             with col3:
                 duracion = st.select_slider("Temporalidad", options=["1 día", "3 días", "1 semana", "2 semanas", "1 mes"])
-                ejes = st.multiselect("Ejes Articuladores", ["Inclusión", "Pensamiento Crítico", "Vida Saludable", "Artes", "Igualdad de Género", "Interculturalidad Crítica"])
+                ejes = st.multiselect("Ejes Articuladores", ["Inclusión", "Pensamiento Crítico", "Interculturalidad Crítica", 
+                                                             "Igualdad de Género", "Vida Saludable", 
+                                                             "Apropiación de las Culturas a través de la Lectura y la Escritura", "Artes y Experiencias Estéticas"])
             
             tema = st.text_area("Nombre del Proyecto o Problemática Central:")
             
@@ -255,6 +257,7 @@ else:
             st.markdown("</div>", unsafe_allow_html=True)
 
 st.markdown("<div class='footer'>© 2025 Maestro Estratega NEM | Matamoros, Tamaulipas.</div>", unsafe_allow_html=True)
+
 
 
 
